@@ -2,6 +2,7 @@ import Flutter
 import UIKit
 import FBSDKShareKit
 import Photos
+import MessageUI
 
 public class SwiftFlutterSocialContentSharePlugin: NSObject, FlutterPlugin {
     var result: FlutterResult?
@@ -54,6 +55,32 @@ public class SwiftFlutterSocialContentSharePlugin: NSObject, FlutterPlugin {
                 default:
                     break
                 }
+            }
+        } else if (call.method == "shareOnWhatsapp"){
+            if let arguments = call.arguments as? [String:Any] {
+                let number = arguments["number"] as? String ?? ""
+                let text = arguments["text"] as? String ?? ""
+                shareWhatsapp(withNumber: number, withTxtMsg: text)
+            }
+            
+        }
+        else if (call.method == "shareOnSMS"){
+            if let arguments = call.arguments as? [String:Any] {
+                let recipients = arguments["recipients"] as? [String] ?? []
+                let text = arguments["text"] as? String ?? ""
+                sendMessage(withRecipient: recipients,withTxtMsg: text)
+            }
+        }
+            
+        else if (call.method == "shareOnEmail"){
+            if let arguments = call.arguments as? [String:Any] {
+                let recipients = arguments["recipients"] as? [String] ?? []
+                let ccrecipients = arguments["ccrecipients"] as? [String] ?? []
+                let bccrecipients = arguments["bccrecipients"] as? [String] ?? []
+                let subject = arguments["subject"] as? String ?? ""
+                let body = arguments["body"] as? String ?? ""
+                let isHTML = arguments["isHTML"] as? Bool ?? false
+                sendEmail(withRecipient: recipients, withCcRecipient: ccrecipients, withBccRecipient: bccrecipients, withBody: body, withSubject: subject, withisHTML: isHTML)
             }
         }
     }
@@ -122,6 +149,62 @@ public class SwiftFlutterSocialContentSharePlugin: NSObject, FlutterPlugin {
             self.result?("Something went wrong")
         }
     }
+    
+    
+    //MARK: SHARE VIA WHATSAPP
+    
+    func shareWhatsapp(withNumber number: String, withTxtMsg txtMsg: String){
+        let urlString = txtMsg.htmlToString
+        let urlStringEncoded = urlString.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlQueryAllowed)
+        let appURL  = NSURL(string: "whatsapp://send?phone=\(String(describing: number))&text=\(urlStringEncoded!)")
+        if UIApplication.shared.canOpenURL(appURL! as URL) {
+            if #available(iOS 10.0, *) {
+                UIApplication.shared.open(appURL! as URL, options: [:], completionHandler: nil)
+            }
+            else {
+                UIApplication.shared.openURL(appURL! as URL)
+            }
+            self.result?("Success")
+        }
+        else {
+            self.result?("Whatsapp app is not installed on your device")
+        }
+    }
+    
+    
+    //MARK: SEND MESSAGE
+    
+    func sendMessage(withRecipient recipent: [String],withTxtMsg txtMsg: String) {
+        let string = txtMsg
+        if (MFMessageComposeViewController.canSendText()) {
+            self.result?("Success")
+            let controller = MFMessageComposeViewController()
+            controller.body = string.htmlToString
+            controller.recipients = recipent
+            controller.messageComposeDelegate = self
+            UIApplication.shared.keyWindow?.rootViewController?.present(controller, animated: true, completion: nil)
+        } else {
+            self.result?("Message service is not available")
+        }
+    }
+    
+    
+    //MARK: SEND EMAIL
+    
+    func sendEmail(withRecipient recipent: [String], withCcRecipient ccrecipent: [String],withBccRecipient bccrecipent: [String],withBody body: String, withSubject subject: String, withisHTML isHTML:Bool ) {
+        if MFMailComposeViewController.canSendMail() {
+            let mail = MFMailComposeViewController()
+            mail.mailComposeDelegate = self
+            mail.setSubject(subject)
+            mail.setMessageBody(body, isHTML: isHTML)
+            mail.setToRecipients(recipent)
+            mail.setCcRecipients(ccrecipent)
+            mail.setBccRecipients(bccrecipent)
+            UIApplication.shared.keyWindow?.rootViewController?.present(mail, animated: true, completion: nil)
+        } else {
+            self.result?("Mail services are not available")
+        }
+    }
 }
 
 
@@ -137,5 +220,29 @@ extension String {
     }
     var htmlToString: String {
         return htmlToAttributedString?.string ?? ""
+    }
+}
+
+//MARK: MFMessageComposeViewControllerDelegate
+extension SwiftFlutterSocialContentSharePlugin:MFMessageComposeViewControllerDelegate{
+    
+    public func messageComposeViewController(_ controller: MFMessageComposeViewController, didFinishWith result: MessageComposeResult) {
+        let map: [MessageComposeResult: String] = [
+            MessageComposeResult.sent: "sent",
+            MessageComposeResult.cancelled: "cancelled",
+            MessageComposeResult.failed: "failed",
+        ]
+        if let callback = self.result {
+            callback(map[result])
+        }
+        UIApplication.shared.keyWindow?.rootViewController?.dismiss(animated: true, completion: nil)
+    }
+}
+
+
+//MARK: MFMailComposeViewControllerDelegate
+extension SwiftFlutterSocialContentSharePlugin: MFMailComposeViewControllerDelegate{
+    public func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        UIApplication.shared.keyWindow?.rootViewController?.dismiss(animated: true, completion: nil)
     }
 }

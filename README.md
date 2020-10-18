@@ -29,9 +29,10 @@ With this plugin you can share on instagram stories and facebook stories.
 #### Add this piece of code in the `manifest/application` in the `android/app/src/main/AndroidManifest.xml`:
 
 ```
-         <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
     
     <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -71,6 +72,7 @@ With this plugin you can share on instagram stories and facebook stories.
         <string>fbapi20150629</string>
         <string>instagram</string>
         <string>instagram-stories</string>
+        <string>whatsapp</string>
     </array>
   
   <key>NSPhotoLibraryAddUsageDescription</key>
@@ -121,6 +123,33 @@ FlutterSocialContentShare.share(
         type: ShareType.facebookWithoutImage,
         url: "https://www.apple.com",
         quote: "captions");
+```
+
+#### shareOnSMS
+
+```
+FlutterSocialContentShare.shareOnSMS(
+    recipients: ["xxxxxx"], text: "Text appears here");
+
+```
+
+#### shareOnEmail
+
+```
+FlutterSocialContentShare.shareOnEmail(
+    recipients: ["xxxx.xxx@gmail.com"],
+    subject: "Subject appears here",
+    body: "Body appears here",
+    isHTML: true); //default isHTML: False
+
+```
+
+#### shareOnWhatsapp
+
+```
+FlutterSocialContentShare.shareOnWhatsapp(
+    number: "xxxxxx", text: "Text appears here");
+
 ```
 
 ## Example
@@ -187,6 +216,30 @@ class _MyAppState extends State<MyApp> {
     print(result);
   }
 
+  /// SHARE ON WHATSAPP CALL
+  shareWatsapp() async {
+    String result = await FlutterSocialContentShare.shareOnWhatsapp(
+        number: "xxxxxx", text: "Text appears here");
+    print(result);
+  }
+
+  /// SHARE ON EMAIL CALL
+  shareEmail() async {
+    String result = await FlutterSocialContentShare.shareOnEmail(
+        recipients: ["xxxx.xxx@gmail.com"],
+        subject: "Subject appears here",
+        body: "Body appears here",
+        isHTML: true); //default isHTML: False
+    print(result);
+  }
+
+  /// SHARE ON SMS CALL
+  shareSMS() async {
+    String result = await FlutterSocialContentShare.shareOnSMS(
+        recipients: ["xxxxxx"], text: "Text appears here");
+    print(result);
+  }
+
   ///Build Context
   @override
   Widget build(BuildContext context) {
@@ -210,6 +263,27 @@ class _MyAppState extends State<MyApp> {
               color: Colors.red,
               onPressed: () {
                 shareOnInstagram();
+              },
+            ),
+            RaisedButton(
+              child: Text("Share to whatsapp button"),
+              color: Colors.red,
+              onPressed: () {
+                shareWatsapp();
+              },
+            ),
+            RaisedButton(
+              child: Text("Share to email button"),
+              color: Colors.red,
+              onPressed: () {
+                shareEmail();
+              },
+            ),
+            RaisedButton(
+              child: Text("Share to sms button"),
+              color: Colors.red,
+              onPressed: () {
+                shareSMS();
               },
             ),
           ],

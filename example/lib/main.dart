@@ -59,6 +59,30 @@ class _MyAppState extends State<MyApp> {
     print(result);
   }
 
+  /// SHARE ON WHATSAPP CALL
+  shareWatsapp() async {
+    String result = await FlutterSocialContentShare.shareOnWhatsapp(
+        number: "xxxxxx", text: "Text appears here");
+    print(result);
+  }
+
+  /// SHARE ON EMAIL CALL
+  shareEmail() async {
+    String result = await FlutterSocialContentShare.shareOnEmail(
+        recipients: ["xxxx.xxx@gmail.com"],
+        subject: "Subject appears here",
+        body: "Body appears here",
+        isHTML: true); //default isHTML: False
+    print(result);
+  }
+
+  /// SHARE ON SMS CALL
+  shareSMS() async {
+    String result = await FlutterSocialContentShare.shareOnSMS(
+        recipients: ["xxxxxx"], text: "Text appears here");
+    print(result);
+  }
+
   ///Build Context
   @override
   Widget build(BuildContext context) {
@@ -82,6 +106,27 @@ class _MyAppState extends State<MyApp> {
               color: Colors.red,
               onPressed: () {
                 shareOnInstagram();
+              },
+            ),
+            RaisedButton(
+              child: Text("Share to whatsapp button"),
+              color: Colors.red,
+              onPressed: () {
+                shareWatsapp();
+              },
+            ),
+            RaisedButton(
+              child: Text("Share to email button"),
+              color: Colors.red,
+              onPressed: () {
+                shareEmail();
+              },
+            ),
+            RaisedButton(
+              child: Text("Share to sms button"),
+              color: Colors.red,
+              onPressed: () {
+                shareSMS();
               },
             ),
           ],

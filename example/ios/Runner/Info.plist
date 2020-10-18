@@ -4,6 +4,7 @@
 <dict>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
+		<string>whatsapp</string>
 		<string>fbapi</string>
 		<string>fbauth</string>
 		<string>fbauth2</string>

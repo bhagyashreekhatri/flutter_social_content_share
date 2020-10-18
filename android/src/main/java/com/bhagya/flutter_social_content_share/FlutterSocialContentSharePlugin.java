@@ -33,6 +33,7 @@ import com.facebook.share.widget.ShareDialog;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
@@ -58,13 +59,22 @@ public class FlutterSocialContentSharePlugin implements FlutterPlugin, MethodCal
   private Activity activity;
   private static CallbackManager callbackManager;
   private Bitmap socialImageBitmap;
+  private Intent shareIntent;
   private static final String INSTAGRAM_PACKAGE_NAME = "com.instagram.android";
+  private static final String WHATSAPP_PACKAGE_NAME = "com.whatsapp";
 
-  String type;
-  String quote;
-  String url;
-  String imageUrl;
-  String imageName;
+  private String type;
+  private String quote;
+  private String url;
+  private String imageUrl;
+  private String imageName;
+  private String number;
+  private String textMsg;
+  private ArrayList<String> recipients;
+  private ArrayList<String> ccrecipients;
+  private ArrayList<String> bccrecipients;
+  private String subject;
+  private String body;
 
   @Override
   public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
@@ -91,8 +101,7 @@ public class FlutterSocialContentSharePlugin implements FlutterPlugin, MethodCal
   public void onMethodCall(@NonNull MethodCall call, @NonNull Result result) {
     if (call.method.equals("getPlatformVersion")) {
       result.success("Android " + android.os.Build.VERSION.RELEASE);
-    }else{
-      if (call.method.equalsIgnoreCase("share")){
+    } else if (call.method.equalsIgnoreCase("share")){
         type = call.argument("type");
         quote = call.argument("quote");
         url = call.argument("url");
@@ -104,13 +113,28 @@ public class FlutterSocialContentSharePlugin implements FlutterPlugin, MethodCal
             shareToFacebook(url, quote, result);
             break;
           case "ShareType.instagramWithImageUrl":
-            getImageBitmap(imageUrl,result);
+            getImageBitmap(imageUrl, result);
             break;
           default:
             result.notImplemented();
             break;
         }
-      }
+    } else if (call.method.equalsIgnoreCase("shareOnWhatsapp")) {
+      number = call.argument("number");
+      textMsg = call.argument("text");
+      shareWhatsApp(number,textMsg,result);
+    } else if (call.method.equalsIgnoreCase("shareOnSMS")) {
+      recipients = call.argument("recipients");
+      textMsg = call.argument("text");
+      shareSMS(recipients,textMsg,result);
+    }
+    else if (call.method.equalsIgnoreCase("shareOnEmail")) {
+      recipients = call.argument("recipients");
+      ccrecipients = call.argument("ccrecipients");
+      bccrecipients = call.argument("bccrecipients");
+      body = call.argument("body");
+      subject = call.argument("subject");
+      shareEmail(recipients,ccrecipients,bccrecipients,subject,body,result);
     }
   }
 
@@ -242,6 +266,70 @@ public class FlutterSocialContentSharePlugin implements FlutterPlugin, MethodCal
   }
 
 
+  /**
+   * share on Whatsapp
+   *
+   * @param number    String
+   * @param text    String
+   * @param result Result
+   */
+  private void shareWhatsApp(String number,String text,Result result) {
+    try {
+      // Check if whatsapp is installed
+      activity.getPackageManager().getPackageInfo(WHATSAPP_PACKAGE_NAME, PackageManager.GET_META_DATA);
+      Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://api.whatsapp.com/send?phone=" + number + "&text=" + text));
+      activity.startActivity(intent);
+    } catch (PackageManager.NameNotFoundException e) {
+      result.success("Whatsapp app is not installed on your device");
+    }
+  }
+
+  /**
+   * share on SMS
+   *
+   * @param recipients    ArrayList<String>
+   * @param text    String
+   * @param result Result
+   */
+  private void shareSMS(ArrayList<String> recipients, String text, Result result) {
+    try{
+      Intent intent = new Intent(Intent.ACTION_VIEW);
+      intent.setData(Uri.parse("smsto:"));
+      intent.setType("vnd.android-dir/mms-sms");
+      intent.putExtra("address",recipients);
+      intent.putExtra("sms_body",text);
+      activity.startActivity(Intent.createChooser(intent, "Send sms via:"));
+    }
+    catch(Exception e){
+      result.success("Message service is not available");
+    }
+  }
+
+  /**
+   * share on Email
+   *
+   * @param recipients ArrayList<String>
+   * @param ccrecipients ArrayList<String>
+   * @param bccrecipients ArrayList<String>
+   * @param subject    String
+   * @param body       String
+   * @param result     Result
+   */
+  private void shareEmail(ArrayList<String> recipients, ArrayList<String> ccrecipients,ArrayList<String> bccrecipients,String subject,String body,Result result){
+
+    Intent shareIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+            "mailto", "", null));
+    shareIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
+    shareIntent.putExtra(Intent.EXTRA_TEXT, body);
+    shareIntent.putExtra(Intent.EXTRA_EMAIL, recipients);
+    shareIntent.putExtra(Intent.EXTRA_CC, ccrecipients);
+    shareIntent.putExtra(Intent.EXTRA_BCC, bccrecipients);
+    try {
+      activity.startActivity(Intent.createChooser(shareIntent, "Send email using..."));
+    } catch (android.content.ActivityNotFoundException ex) {
+      result.success("Mail services are not available");
+    }
+  }
 
   @Override
   public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
