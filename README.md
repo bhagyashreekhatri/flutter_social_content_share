@@ -15,7 +15,7 @@ With this plugin you can share on instagram stories and facebook stories.
 #### Paste the following attribute in the `manifest` tag in the `android/app/src/main/AndroidManifest.xml`:
 
 ```
- 		`xmlns:tools="http://schemas.android.com/tools"`
+         `xmlns:tools="http://schemas.android.com/tools"`
 ```
 
 ##### For example:
@@ -29,7 +29,7 @@ With this plugin you can share on instagram stories and facebook stories.
 #### Add this piece of code in the `manifest/application` in the `android/app/src/main/AndroidManifest.xml`:
 
 ```
- 		<uses-permission android:name="android.permission.INTERNET" />
+         <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     
@@ -55,28 +55,28 @@ With this plugin you can share on instagram stories and facebook stories.
 
 ```
 <key>LSApplicationQueriesSchemes</key>
-	<array>
-		<string>fbapi</string>
-		<string>fbauth</string>
-		<string>fbauth2</string>
-		<string>fbshareextension</string>
-		<string>fbapi20130214</string>
-		<string>fbapi20130410</string>
-		<string>fbapi20130702</string>
-		<string>fbapi20131010</string>
-		<string>fbapi20131219</string>
-		<string>fbapi20140410</string>
-		<string>fbapi20140116</string>
-		<string>fbapi20150313</string>
-		<string>fbapi20150629</string>
-		<string>instagram</string>
-		<string>instagram-stories</string>
-	</array>
+    <array>
+        <string>fbapi</string>
+        <string>fbauth</string>
+        <string>fbauth2</string>
+        <string>fbshareextension</string>
+        <string>fbapi20130214</string>
+        <string>fbapi20130410</string>
+        <string>fbapi20130702</string>
+        <string>fbapi20131010</string>
+        <string>fbapi20131219</string>
+        <string>fbapi20140410</string>
+        <string>fbapi20140116</string>
+        <string>fbapi20150313</string>
+        <string>fbapi20150629</string>
+        <string>instagram</string>
+        <string>instagram-stories</string>
+    </array>
   
   <key>NSPhotoLibraryAddUsageDescription</key>
-	<string>Allow $(PRODUCT_NAME) access to your photo library to upload your profile picture?</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Allow $(PRODUCT_NAME) access to your photo library to upload your profile picture?</string>
+    <string>Allow $(PRODUCT_NAME) access to your photo library to upload your profile picture?</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>Allow $(PRODUCT_NAME) access to your photo library to upload your profile picture?</string>
   
 ```
 
@@ -87,21 +87,21 @@ With this plugin you can share on instagram stories and facebook stories.
 <string>xxxxxxxxxxxxxxx</string>
 
 <key>FacebookDisplayName</key>
-	<string>My App</string>
+    <string>My App</string>
 ```
 
 ### Add the below code which will help you in opening the facebook on webpage. If your facebook app is not installed in your device."xxxxxxxxxxxxxxx" represents your facebook app id.
 
 ```
 <key>CFBundleURLTypes</key>
-	<array>
-		<dict>
-			<key>CFBundleURLSchemes</key>
-			<array>
-				<string>xxxxxxxxxxxxxxx</string>
-			</array>
-		</dict>
-	</array>
+    <array>
+        <dict>
+            <key>CFBundleURLSchemes</key>
+            <array>
+                <string>xxxxxxxxxxxxxxx</string>
+            </array>
+        </dict>
+    </array>
   
 ```
 
@@ -220,3 +220,4 @@ class _MyAppState extends State<MyApp> {
 }
 
 ```
+

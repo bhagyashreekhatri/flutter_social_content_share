@@ -1,0 +1,44 @@
+group 'com.bhagya.flutter_social_content_share'
+version '1.0'
+
+buildscript {
+    repositories {
+        google()
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.5.0'
+    }
+}
+
+rootProject.allprojects {
+    repositories {
+        google()
+        jcenter()
+    }
+}
+
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 29
+
+    defaultConfig {
+        minSdkVersion 16
+    }
+    lintOptions {
+        disable 'InvalidPackage'
+    }
+}
+
+dependencies {
+    implementation 'com.facebook.android:facebook-share:5.9.0'
+    implementation 'com.karumi:dexter:6.2.0'
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
+    implementation('com.github.bumptech.glide:glide:4.8.0-20180619.011009-9', {
+        exclude group: "com.android.support"
+    })
+    implementation 'com.github.bumptech.glide:glide:4.10.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
+}
