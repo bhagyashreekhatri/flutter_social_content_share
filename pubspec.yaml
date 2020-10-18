@@ -1,8 +1,7 @@
 name: flutter_social_content_share
 description: A new flutter plugin project.
 version: 0.0.1
-author: Bhagyashree Khatri
-homepage: https://github.com/bhagyashreekhatri
+homepage: https://github.com/bhagyashreekhatri/flutter_social_content_share
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
