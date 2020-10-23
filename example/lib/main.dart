@@ -62,7 +62,7 @@ class _MyAppState extends State<MyApp> {
   /// SHARE ON WHATSAPP CALL
   shareWatsapp() async {
     String result = await FlutterSocialContentShare.shareOnWhatsapp(
-        number: "xxxxxx", text: "Text appears here");
+        "0000000", "Text Appear hear");
     print(result);
   }
 

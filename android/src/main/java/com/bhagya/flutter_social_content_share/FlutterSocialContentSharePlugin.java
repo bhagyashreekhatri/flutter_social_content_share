@@ -11,6 +11,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.provider.MediaStore;
 
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
@@ -123,7 +124,9 @@ public class FlutterSocialContentSharePlugin implements FlutterPlugin, MethodCal
       number = call.argument("number");
       textMsg = call.argument("text");
       shareWhatsApp(number,textMsg,result);
-    } else if (call.method.equalsIgnoreCase("shareOnSMS")) {
+    }
+
+    else if (call.method.equalsIgnoreCase("shareOnSMS")) {
       recipients = call.argument("recipients");
       textMsg = call.argument("text");
       shareSMS(recipients,textMsg,result);
@@ -274,16 +277,16 @@ public class FlutterSocialContentSharePlugin implements FlutterPlugin, MethodCal
    * @param result Result
    */
   private void shareWhatsApp(String number,String text,Result result) {
+    Intent intent = new Intent(Intent.ACTION_SEND);
+    intent.setType("text/plain");
+    intent.setPackage("com.whatsapp");
+    intent.putExtra(Intent.EXTRA_TEXT, text);
     try {
-      // Check if whatsapp is installed
-      activity.getPackageManager().getPackageInfo(WHATSAPP_PACKAGE_NAME, PackageManager.GET_META_DATA);
-      Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://api.whatsapp.com/send?phone=" + number + "&text=" + text));
       activity.startActivity(intent);
-    } catch (PackageManager.NameNotFoundException e) {
+    } catch (android.content.ActivityNotFoundException ex) {
       result.success("Whatsapp app is not installed on your device");
     }
   }
-
   /**
    * share on SMS
    *

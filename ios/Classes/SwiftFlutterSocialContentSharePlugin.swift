@@ -62,8 +62,8 @@ public class SwiftFlutterSocialContentSharePlugin: NSObject, FlutterPlugin {
                 let text = arguments["text"] as? String ?? ""
                 shareWhatsapp(withNumber: number, withTxtMsg: text)
             }
-            
         }
+
         else if (call.method == "shareOnSMS"){
             if let arguments = call.arguments as? [String:Any] {
                 let recipients = arguments["recipients"] as? [String] ?? []
@@ -170,8 +170,6 @@ public class SwiftFlutterSocialContentSharePlugin: NSObject, FlutterPlugin {
             self.result?("Whatsapp app is not installed on your device")
         }
     }
-    
-    
     //MARK: SEND MESSAGE
     
     func sendMessage(withRecipient recipent: [String],withTxtMsg txtMsg: String) {

@@ -29,7 +29,7 @@ class FlutterSocialContentShare {
     return message;
   }
 
-  static Future<String> shareOnWhatsapp({String number, String text}) async {
+  static Future<String> shareOnWhatsapp(String number, String text) async {
     final Map<String, dynamic> params = <String, dynamic>{
       "number": number,
       "text": text
