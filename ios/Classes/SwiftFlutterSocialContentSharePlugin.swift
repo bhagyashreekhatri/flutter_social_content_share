@@ -34,7 +34,6 @@ public class SwiftFlutterSocialContentSharePlugin: NSObject, FlutterPlugin {
                     break
                     
                 case "ShareType.instagramWithImageUrl":
-                    self.result?(shareImageUrl)
                     let url = URL(string: shareImageUrl)
                     if let urlData = url {
                         let data = try? Data(contentsOf: urlData)
@@ -120,33 +119,33 @@ public class SwiftFlutterSocialContentSharePlugin: NSObject, FlutterPlugin {
         
         //Save image on device
         do {
-            try PHPhotoLibrary.shared().performChangesAndWait({
+            try PHPhotoLibrary.shared().performChangesAndWait{
                 let request = PHAssetChangeRequest.creationRequestForAsset(from: image)
                 let assetID = request.placeholderForCreatedAsset?.localIdentifier ?? ""
                 self.shareURL = "instagram://library?LocalIdentifier=" + assetID
-            })
+                
+                //Share image
+                if UIApplication.shared.canOpenURL(instagramURL as URL) {
+                    if let sharingUrl = self.shareURL {
+                        if let urlForRedirect = NSURL(string: sharingUrl) {
+                            if #available(iOS 10.0, *) {
+                                UIApplication.shared.open(urlForRedirect as URL, options: [:], completionHandler: nil)
+                            }
+                            else{
+                                UIApplication.shared.openURL(urlForRedirect as URL)
+                            }
+                        }
+                        self.result?("Success")
+                    }
+                } else{
+                    self.result?("Instagram app is not installed on your device")
+                }
+            }
         } catch {
             if let result = result {
                 self.result?("Failure")
                 result(false)
             }
-        }
-        
-        //Share image
-        if UIApplication.shared.canOpenURL(instagramURL as URL) {
-            if let sharingUrl = self.shareURL {
-                if let urlForRedirect = NSURL(string: sharingUrl) {
-                    if #available(iOS 10.0, *) {
-                        UIApplication.shared.open(urlForRedirect as URL, options: [:], completionHandler: nil)
-                    }
-                    else{
-                        UIApplication.shared.openURL(urlForRedirect as URL)
-                    }
-                }
-                self.result?("Success")
-            }
-        } else{
-            self.result?("Something went wrong")
         }
     }
     
