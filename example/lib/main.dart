@@ -94,37 +94,32 @@ class _MyAppState extends State<MyApp> {
         body: Column(
           children: <Widget>[
             Text('Running on: $_platformVersion\n'),
-            RaisedButton(
+            TextButton(
               child: Text("Share to facebook button"),
-              color: Colors.red,
               onPressed: () {
                 shareOnFacebook();
               },
             ),
-            RaisedButton(
+            TextButton(
               child: Text("Share to instagram button"),
-              color: Colors.red,
               onPressed: () {
                 shareOnInstagram();
               },
             ),
-            RaisedButton(
+            TextButton(
               child: Text("Share to whatsapp button"),
-              color: Colors.red,
               onPressed: () {
                 shareWatsapp();
               },
             ),
-            RaisedButton(
+            TextButton(
               child: Text("Share to email button"),
-              color: Colors.red,
               onPressed: () {
                 shareEmail();
               },
             ),
-            RaisedButton(
+            TextButton(
               child: Text("Share to sms button"),
-              color: Colors.red,
               onPressed: () {
                 shareSMS();
               },

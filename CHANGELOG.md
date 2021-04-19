@@ -1,3 +1,6 @@
+##1.0.0
+- Migrated to null safety check, flutter sdk
+
 ## 0.0.4
 
 - Minor bug fix for instagram app when it is not there on device
@@ -5,7 +8,6 @@
 ## 0.0.3
 
 - Minor bug fix for whatsapp
-
 
 ## 0.0.2
 
