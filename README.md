@@ -50,6 +50,29 @@ With this plugin you can share on instagram stories and facebook stories.
 <string name="facebook_app_id">xxxxxxxxxx</string>
 ```
 
+#### When targeting Android 11 (API level 30)
+
+When an app targets Android 11 (API level 30) or higher and queries for information about the other apps that are installed on a device, the system filters this information by default. The limited package visibility reduces the number of apps that appear to be installed on a device, from your app's perspective. This Plugin checks if Instagram installed. Because of the above, even with Instagram installed, you will end up with "**_Instagram app is not installed on your device_**"-errors as your app is not allowed to see Instagram.
+
+Read this for more background information: [https://developer.android.com/training/package-visibility](https://developer.android.com/training/package-visibility)
+
+If you are using Android Gradle plugin 4.1+, your tools should work with the new `<queries>` declaration. However, older versions of the Android Gradle plugin are not aware of this new element.
+
+##### How to solve this
+
+In your `android/build.gradle` file, apply the correct Android Gradle plugin fix, as described on [https://android-developers.googleblog.com/2020/07/preparing-your-build-for-package-visibility-in-android-11.html](https://android-developers.googleblog.com/2020/07/preparing-your-build-for-package-visibility-in-android-11.html): Change the `classpath 'com.android.tools.build:gradle` dependency to a dot release version that is compatible with `<queries>`. E.g.:
+
+```gradle
+buildscript {
+    ...
+    dependencies {
+        // classpath 'com.android.tools.build:gradle:3.5.3'
+        classpath 'com.android.tools.build:gradle:3.5.4'
+        ...
+    }
+}
+```
+
 ### iOS Configuration
 
 #### Add this to your `Info.plist` to use share on instagram and facebook story
