@@ -1,4 +1,5 @@
 # flutter_social_content_share
+
 Flutter Plugin for sharing contents to social media.
 
 ## Introduction
@@ -18,9 +19,9 @@ With this plugin you can share on instagram stories and facebook stories.
          `xmlns:tools="http://schemas.android.com/tools"`
 ```
 
-##### For example:
+##### For example
 
-```
+```xml
         <manifest xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:tools="http://schemas.android.com/tools"
                 package="your package...">
@@ -28,12 +29,12 @@ With this plugin you can share on instagram stories and facebook stories.
 
 #### Add this piece of code in the `manifest/application` in the `android/app/src/main/AndroidManifest.xml`:
 
-```
+```xml
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.SEND_SMS" />
-    
+
     <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
@@ -46,7 +47,7 @@ With this plugin you can share on instagram stories and facebook stories.
 
 #### Create a xml file named `styles.xml` in the `app/src/main/res/values/styles.xml` folder and paste this code in the file :
 
-```
+```xml
 <string name="facebook_app_id">xxxxxxxxxx</string>
 ```
 
@@ -77,7 +78,7 @@ buildscript {
 
 #### Add this to your `Info.plist` to use share on instagram and facebook story
 
-```
+```plist
 <key>LSApplicationQueriesSchemes</key>
     <array>
         <string>fbapi</string>
@@ -97,17 +98,17 @@ buildscript {
         <string>instagram-stories</string>
         <string>whatsapp</string>
     </array>
-  
+
   <key>NSPhotoLibraryAddUsageDescription</key>
     <string>Allow $(PRODUCT_NAME) access to your photo library to upload your profile picture?</string>
     <key>NSPhotoLibraryUsageDescription</key>
     <string>Allow $(PRODUCT_NAME) access to your photo library to upload your profile picture?</string>
-  
+
 ```
 
 ### Add this if you are using share on facebook. For this you have to create an app on https://developers.facebook.com/ and get the App ID
 
-```
+```plist
 <key>FacebookAppID</key>
 <string>xxxxxxxxxxxxxxx</string>
 
@@ -117,7 +118,7 @@ buildscript {
 
 ### Add the below code which will help you in opening the facebook on webpage. If your facebook app is not installed in your device."xxxxxxxxxxxxxxx" represents your facebook app id.
 
-```
+```plist
 <key>CFBundleURLTypes</key>
     <array>
         <dict>
@@ -127,12 +128,12 @@ buildscript {
             </array>
         </dict>
     </array>
-  
+
 ```
 
 #### shareOnInstagram
 
-```
+```dart
 FlutterSocialContentShare.share(
         type: ShareType.instagramWithImageUrl,
         imageUrl:
@@ -141,17 +142,16 @@ FlutterSocialContentShare.share(
 
 #### shareOnFacebook
 
-```
+```dart
 FlutterSocialContentShare.share(
         type: ShareType.facebookWithoutImage,
         url: "https://www.apple.com",
         quote: "captions");
 ```
 
-
 #### shareOnSMS
 
-```
+```dart
 FlutterSocialContentShare.shareOnSMS(
     recipients: ["xxxxxx"], text: "Text appears here");
 
@@ -159,7 +159,7 @@ FlutterSocialContentShare.shareOnSMS(
 
 #### shareOnEmail
 
-```
+```dart
 FlutterSocialContentShare.shareOnEmail(
     recipients: ["xxxx.xxx@gmail.com"],
     subject: "Subject appears here",
@@ -170,7 +170,7 @@ FlutterSocialContentShare.shareOnEmail(
 
 #### shareOnWhatsapp
 
-```
+```dart
 FlutterSocialContentShare.shareOnWhatsapp(
     number: "xxxxxx", text: "Text appears here");
 
@@ -178,7 +178,7 @@ FlutterSocialContentShare.shareOnWhatsapp(
 
 ## Example
 
-```
+```dart
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:flutter/services.dart';
@@ -318,4 +318,3 @@ class _MyAppState extends State<MyApp> {
 }
 
 ```
-
