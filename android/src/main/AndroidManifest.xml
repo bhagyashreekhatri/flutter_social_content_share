@@ -1,3 +1,6 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  package="com.bhagya.flutter_social_content_share">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.bhagya.flutter_social_content_share">
+  <queries>
+    <package android:name="com.instagram.android" />
+    <package android:name="com.whatsapp" />
+  </queries>
 </manifest>
