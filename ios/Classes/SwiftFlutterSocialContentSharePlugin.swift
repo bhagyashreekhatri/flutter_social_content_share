@@ -4,7 +4,19 @@ import FBSDKShareKit
 import Photos
 import MessageUI
 
-public class SwiftFlutterSocialContentSharePlugin: NSObject, FlutterPlugin {
+public class SwiftFlutterSocialContentSharePlugin: NSObject, FlutterPlugin, SharingDelegate {
+    public func sharer(_ sharer: Sharing, didCompleteWithResults results: [String : Any]) {
+        
+    }
+    
+    public func sharer(_ sharer: Sharing, didFailWithError error: Error) {
+        
+    }
+    
+    public func sharerDidCancel(_ sharer: Sharing) {
+        
+    }
+    
     var result: FlutterResult?
     var shareURL:String?
     
@@ -88,16 +100,18 @@ public class SwiftFlutterSocialContentSharePlugin: NSObject, FlutterPlugin {
     private func shareFacebookWithoutImage(withQuote quote: String?, withUrl urlString: String?) {
         DispatchQueue.main.async {
             let shareContent = ShareLinkContent()
-            let shareDialog = ShareDialog()
             if let url = urlString {
                 shareContent.contentURL = URL.init(string: url)!
             }
             if let quoteString = quote {
                 shareContent.quote = quoteString.htmlToString
             }
-            shareDialog.shareContent = shareContent
             if let flutterAppDelegate = UIApplication.shared.delegate as? FlutterAppDelegate {
-                shareDialog.fromViewController = flutterAppDelegate.window.rootViewController
+                let shareDialog = ShareDialog(
+                    fromViewController: flutterAppDelegate.window.rootViewController,
+                    content: shareContent,
+                    delegate: self
+                )
                 shareDialog.mode = .automatic
                 shareDialog.show()
                 self.result?("Success")
