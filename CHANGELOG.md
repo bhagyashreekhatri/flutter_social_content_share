@@ -1,4 +1,9 @@
+## 1.0.2
+
+- Bug fixed for "init() is unavailable" in iOS
+
 ## 1.0.1
+
 - Added support for Android 11 (API level 30)
 
 ## 1.0.0

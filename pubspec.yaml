@@ -1,7 +1,7 @@
 name: flutter_social_content_share
 description: This plugin can share the contents on social media like instagram, facebook, email, sms and whatsapp. This works fine on iOS and Android platforms.
 
-version: 1.0.1
+version: 1.0.2
 homepage: https://github.com/bhagyashreekhatri/flutter_social_content_share
 
 environment:
