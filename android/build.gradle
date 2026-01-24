@@ -22,7 +22,10 @@ rootProject.allprojects {
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 29
+    if (project.android.hasProperty("namespace")) {
+        namespace = "com.bhagya.flutter_social_content_share"
+    }
+    compileSdkVersion 34
 
     defaultConfig {
         minSdkVersion 16
